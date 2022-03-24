@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemyController : MonoBehaviour {
     public float speed = 5f;
@@ -21,7 +23,9 @@ public class EnemyController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+        // transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
         transform.LookAt(targetPosition);
+        var thisRotation = transform.rotation;
+        transform.Rotate(thisRotation.x, thisRotation.y + 90, thisRotation.z);
     }
 }
