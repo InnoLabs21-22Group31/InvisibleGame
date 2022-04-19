@@ -35,6 +35,8 @@ public class EnemyController : MonoBehaviour {
 
     private void StopMovement() {
         _rigidbody.velocity = Vector3.zero;
+        animator.SetInteger("legs", 5);
+        animator.SetInteger("arms", 34);
     }
 
     private void OnTriggerEnter(Collider other) {

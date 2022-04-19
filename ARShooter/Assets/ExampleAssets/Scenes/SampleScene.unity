@@ -586,6 +586,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MeleeEnemy Variant (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8557164083965598979, guid: d11b088ed7e321444bf66ea026cc8f53,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d11b088ed7e321444bf66ea026cc8f53, type: 3}
 --- !u!1 &2086901583
