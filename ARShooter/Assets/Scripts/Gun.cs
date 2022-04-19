@@ -1,24 +1,46 @@
+using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Gun : MonoBehaviour {
     public Camera playerCamera;
     public float range = 100f;
     public float rateOfFire = 1f;
+    public int ammoCapacity = 7;
     public ParticleSystem muzzleFlash;
+    public float reloadTime = 2f;
+    public GameObject player;
 
-    private float gunReadyAt = 0f;
+    private PlayerController _playerController;
+    private int _loadedAmmo;
+    private bool _reloading = false;
+    private float _gunReadyAt = 0f;
+
+
+    private void Start() {
+        _playerController = player.GetComponent<PlayerController>();
+        _loadedAmmo = ammoCapacity;
+        DisplayAmmo();
+    }
 
     // Update is called once per frame
     void Update() {
-        if (Input.GetButton("Fire1") && Time.time >= gunReadyAt) {
+        if (_reloading) return;
+        
+        if (Input.GetButton("Fire1") && Time.time >= _gunReadyAt && _loadedAmmo > 0) {
             Fire();
+        } else if (Input.GetKeyDown("r")) {
+            _reloading = true;
+            StartCoroutine(Reload());
         }
     }
 
     private void Fire() {
         RaycastHit hit;
         muzzleFlash.Play();
-        gunReadyAt = Time.time + 1f / rateOfFire;
+        _gunReadyAt = Time.time + 1f / rateOfFire;
+        RemoveAmmo();
 
         // Fire straight ahead
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range)) {
@@ -31,5 +53,22 @@ public class Gun : MonoBehaviour {
                 }
             }
         }
+    }
+
+    private void RemoveAmmo() {
+        _loadedAmmo--;
+        DisplayAmmo();
+    }
+
+    private void DisplayAmmo() {
+        _playerController.SetAmmoDisplay(_loadedAmmo, ammoCapacity);
+    }
+
+    private IEnumerator Reload() {
+        Debug.Log("reloading");
+        yield return new WaitForSeconds(reloadTime);
+        _loadedAmmo = ammoCapacity;
+        DisplayAmmo();
+        _reloading = false;
     }
 }
