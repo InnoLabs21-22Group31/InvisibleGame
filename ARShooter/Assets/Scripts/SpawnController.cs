@@ -1,6 +1,6 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 public class SpawnController : MonoBehaviour {
@@ -8,11 +8,13 @@ public class SpawnController : MonoBehaviour {
 
     public float maximumSpawnDistance = 25f;
 
-    public float waveNumber = 0;
+    public float waveNumber = 1;
 
     public GameObject enemyPrefab;
 
     public int timeBetweenWaves = 15;
+    
+    public TextMeshProUGUI waveDisplay;
 
     // Start is called before the first frame update
     private void Start() {
@@ -21,6 +23,7 @@ public class SpawnController : MonoBehaviour {
 
     public IEnumerator SpawnWaves() {
         while (true) {
+            waveDisplay.SetText("Wave: {0}", waveNumber);
             var currentPlayerPosition = transform.position;
 
             for (var i = 0; i < waveNumber + 3; i++) {
@@ -28,6 +31,7 @@ public class SpawnController : MonoBehaviour {
             }
 
             waveNumber++;
+            
             yield return new WaitForSeconds(timeBetweenWaves);
         }
     }
