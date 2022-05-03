@@ -6,6 +6,8 @@ public class EnemyController : MonoBehaviour {
 
     private Animator animator;
 
+    private PlayerController playerController;
+    
     private GameObject playerCamera;
 
     private Vector3 targetPosition;
@@ -17,6 +19,7 @@ public class EnemyController : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         animator = gameObject.GetComponent<Animator>();
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         playerCamera = GameObject.Find("PlayerCamera");
         targetPosition = playerCamera.transform.position;
         targetPosition.y = 0;
@@ -39,15 +42,16 @@ public class EnemyController : MonoBehaviour {
         animator.SetInteger("arms", 34);
     }
 
-    private void OnTriggerEnter(Collider other) {
+    public void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            Debug.Log("Game over");
             close = true;
             StopMovement();
         }
-        else {
-            close = false;
-        }
+    }
+
+    public void OnHitPlayer() {
+        Debug.Log("Hit");
+        playerController.OnHit();
     }
 
     public void Hit() {
