@@ -4,6 +4,8 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour {
     public float speed = 5f;
 
+    public int pointsWorth = 1;
+    
     private Animator animator;
 
     private PlayerController playerController;
@@ -55,6 +57,7 @@ public class EnemyController : MonoBehaviour {
     }
 
     public void Hit() {
+        playerController.AddScore(pointsWorth);
         Destroy(gameObject);
     }
 }
