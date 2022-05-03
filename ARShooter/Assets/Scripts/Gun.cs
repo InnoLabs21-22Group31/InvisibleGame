@@ -27,16 +27,18 @@ public class Gun : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (_reloading) return;
-        
-        if (Input.GetButton("Fire1") && Time.time >= _gunReadyAt && _loadedAmmo > 0) {
+
+        if (Input.GetButton("Fire1"))
             Fire();
-        } else if (Input.GetKeyDown("r")) {
-            _reloading = true;
-            StartCoroutine(Reload());
+        else if (Input.GetKeyDown("r")) {
+            StartReloading();
         }
     }
 
-    private void Fire() {
+    public void Fire() {
+        if (!(Time.time >= _gunReadyAt && _loadedAmmo > 0))
+            return;
+
         RaycastHit hit;
         muzzleFlash.Play();
         _gunReadyAt = Time.time + 1f / rateOfFire;
@@ -64,6 +66,11 @@ public class Gun : MonoBehaviour {
         _playerController.SetAmmoDisplay(_loadedAmmo, ammoCapacity);
     }
 
+    public void StartReloading() {
+        _reloading = true;
+        StartCoroutine(Reload());
+    }
+    
     private IEnumerator Reload() {
         Debug.Log("reloading");
         yield return new WaitForSeconds(reloadTime);
