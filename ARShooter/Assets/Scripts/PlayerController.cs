@@ -5,12 +5,15 @@ public class PlayerController : MonoBehaviour {
     public TextMeshProUGUI ammoDisplay;
     public TextMeshProUGUI scoreDisplay;
     private int _score = 0;
+    public GameObject gameOverCanvas;
 
     public void SetAmmoDisplay(int loadedAmmo, int ammoCapacity) {
         ammoDisplay.SetText("{0} / {1}", loadedAmmo, ammoCapacity);
     }
 
     public void OnHit() {
+        Time.timeScale = 0;
+        gameOverCanvas.SetActive(true);
         Debug.Log("Game Over!");
     }
 
