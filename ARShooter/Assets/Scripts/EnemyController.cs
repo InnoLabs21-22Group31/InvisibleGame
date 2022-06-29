@@ -1,63 +1,76 @@
 using System;
+using System.Collections;
+using System.Numerics;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 public class EnemyController : MonoBehaviour {
     public float speed = 5f;
 
     public int pointsWorth = 1;
-    
-    private Animator animator;
 
-    private PlayerController playerController;
+    private SpawnController _spawnController;
     
-    private GameObject playerCamera;
+    private Animator _animator;
 
-    private Vector3 targetPosition;
+    private PlayerController _playerController;
+    
+    private GameObject _playerCamera;
 
     private Rigidbody _rigidbody;
 
-    bool close = false;
+    private bool _close = false;
 
     // Start is called before the first frame update
     void Start() {
-        animator = gameObject.GetComponent<Animator>();
-        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
-        playerCamera = GameObject.Find("PlayerCamera");
-        targetPosition = playerCamera.transform.position;
-        targetPosition.y = 0;
+        _animator = gameObject.GetComponent<Animator>();
+        _playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        _playerCamera = GameObject.Find("PlayerCamera");
+        StartCoroutine(UpdatePlayerPosition());
         _rigidbody = gameObject.GetComponent<Rigidbody>();
+        _spawnController = GlobalInformationController.Instance.SpawnController;
     }
 
     // Update is called once per frame
-    void Update() {
-        if (!close) {
-            transform.LookAt(targetPosition);
-            var thisRotation = transform.rotation;
-            transform.Rotate(thisRotation.x, thisRotation.y + 90, thisRotation.z);
-            _rigidbody.AddRelativeForce(new Vector3(-1, 0, 0) * speed * Time.deltaTime,ForceMode.Force);
-        }
+    void FixedUpdate() {
+        if (_close) return;
+        var targetPosition = _playerCamera.transform.position;
+        targetPosition.y -= 1.75f;
+        transform.LookAt(targetPosition);
+        var thisRotation = transform.rotation;
+        transform.Rotate(thisRotation.x, thisRotation.y + 90, thisRotation.z);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
     }
 
+    private IEnumerator UpdatePlayerPosition() {
+        while (true) {
+            
+
+            yield return new WaitForSeconds(1f);
+        }
+    }
+    
     private void StopMovement() {
         _rigidbody.velocity = Vector3.zero;
-        animator.SetInteger("legs", 5);
-        animator.SetInteger("arms", 34);
+        _animator.SetInteger("legs", 5);
+        _animator.SetInteger("arms", 34);
     }
 
     public void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            close = true;
+            _close = true;
             StopMovement();
         }
     }
 
     public void OnHitPlayer() {
         Debug.Log("Hit");
-        playerController.OnHit();
+        _playerController.OnHit();
     }
 
     public void Hit() {
-        playerController.AddScore(pointsWorth);
+        _playerController.AddScore(pointsWorth);
+        _spawnController.EnemyGotHit();
         Destroy(gameObject);
     }
 }

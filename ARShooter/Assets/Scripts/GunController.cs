@@ -3,7 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class Gun : MonoBehaviour {
+public class GunController : MonoBehaviour {
     public Camera playerCamera;
     public float range = 100f;
     public float rateOfFire = 1f;
@@ -28,6 +28,7 @@ public class Gun : MonoBehaviour {
     void Update() {
         if (_reloading) return;
 
+        if (!Debug.isDebugBuild) return;
         if (Input.GetButton("Fire1"))
             Fire();
         else if (Input.GetKeyDown("r")) {
@@ -70,7 +71,7 @@ public class Gun : MonoBehaviour {
         _reloading = true;
         StartCoroutine(Reload());
     }
-    
+
     private IEnumerator Reload() {
         Debug.Log("reloading");
         yield return new WaitForSeconds(reloadTime);

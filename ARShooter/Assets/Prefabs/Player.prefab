@@ -316,7 +316,6 @@ MonoBehaviour:
   waveNumber: 1
   enemyPrefab: {fileID: 7832663312981138558, guid: d11b088ed7e321444bf66ea026cc8f53,
     type: 3}
-  timeBetweenWaves: 15
   waveDisplay: {fileID: 130939330}
 --- !u!1 &8424847286944904032
 GameObject:
@@ -1323,6 +1322,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammoDisplay: {fileID: 8424847286944904038}
   scoreDisplay: {fileID: 47599624}
+  drawnWeapon: {fileID: 0}
+  arPlaneManager: {fileID: 0}
 --- !u!1001 &1932611874783504666
 PrefabInstance:
   m_ObjectHideFlags: 0
